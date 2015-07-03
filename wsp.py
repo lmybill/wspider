@@ -38,19 +38,22 @@ html=getHtml(url)
 
 #修改html里已经存在文件夹里的资源的绝对路径为相对路径
 def modpath(resurl,y):
-	with open(path+'/main.html', "r+") as f:
-		d=f.read()
-		d=d.replace(resurl,y)
-		f.write(d)
-	f.close()
+    f=open(path+'/main.html', "r")
+    d=f.read()
+    f.close()
+    f=open(path+'/main.html', "w")
+    d=d.replace(resurl,y)
+    f.write(d)
+    f.close()
 
 #获取css并将绝对路径改为相对路径
 def getCss(html):
     regcss=r'href="(.+?\.css)"'
     cssre=re.compile(regcss)
-    csslist=re.findall(regcss,html)
+    csslist=re.findall(cssre,html)
     for cssurl in csslist:
-		modpath(jsurl,y)
+        y='./css/'+cssurl.split('/')[-1]
+        modpath(cssurl,y)
         filepath=csspath+'/'+cssurl.split('/')[-1]
         urllib.urlretrieve(cssurl, filepath)
 
@@ -61,7 +64,8 @@ def getImg(html):
     imgre=re.compile(reg)
     imglist=re.findall(imgre,html)
     for imgurl in imglist:
-		modpath(jsurl,y)
+        y='./mages/'+imgurl.split('/')[-1]
+        modpath(imgurl,y)
         filepath=imagepath+'/'+imgurl.split('/')[-1]
         urllib.urlretrieve(imgurl, filepath)
 
@@ -72,7 +76,7 @@ def getJs(html):
     jsre=re.compile(regjs)
     jslist=re.findall(jsre,html)
     for jsurl in jslist:
-        y='/js/'+jsurl.split('/')[-1]
+        y='./js/'+jsurl.split('/')[-1]
         modpath(jsurl,y)
         filepath=jspath+'/'+jsurl.split('/')[-1]
         urllib.urlretrieve(jsurl, filepath)
