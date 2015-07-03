@@ -36,45 +36,44 @@ def getHtml(url):
     return html
 html=getHtml(url)
 
-#获取css
+#修改html里已经存在文件夹里的资源的绝对路径为相对路径
+def modpath(resurl,y):
+	with open(path+'/main.html', "r+") as f:
+		d=f.read()
+		d=d.replace(resurl,y)
+		f.write(d)
+	f.close()
+
+#获取css并将绝对路径改为相对路径
 def getCss(html):
     regcss=r'href="(.+?\.css)"'
     cssre=re.compile(regcss)
     csslist=re.findall(regcss,html)
     for cssurl in csslist:
- 
+		modpath(jsurl,y)
         filepath=csspath+'/'+cssurl.split('/')[-1]
         urllib.urlretrieve(cssurl, filepath)
 
 
-#获取imgages
+#获取imgages并将绝对路径改为相对路径
 def getImg(html):
     reg=r'="(.+?\.jpg)"'
     imgre=re.compile(reg)
     imglist=re.findall(imgre,html)
     for imgurl in imglist:
+		modpath(jsurl,y)
         filepath=imagepath+'/'+imgurl.split('/')[-1]
         urllib.urlretrieve(imgurl, filepath)
 
 
-#获取Js
+#获取Js并将绝对路径改为相对路径
 def getJs(html):
     regjs=r'src="(.+?\.js)"'
     jsre=re.compile(regjs)
-    #print('abc')
     jslist=re.findall(jsre,html)
-    #print(jslist)
     for jsurl in jslist:
         y='/js/'+jsurl.split('/')[-1]
-        with open(path+'/main.html', "r+") as f:
-            d=f.read()
-            d=d.replace(jsurl, y)
-            f.write(d)
-        f.close()
-       
-        #html=html.replace(jsurl,r)
-        #print(html)
-        print(jsurl)
+        modpath(jsurl,y)
         filepath=jspath+'/'+jsurl.split('/')[-1]
         urllib.urlretrieve(jsurl, filepath)
 
